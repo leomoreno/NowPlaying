@@ -1,0 +1,53 @@
+<md-content layout-fill>
+  <section class="jumbotron">
+    <!-- <h1>#nowplaying in {{city_name}}</h1>
+    <p class="lead">
+      <img src="assets/images/yeoman.png" alt="I'm Yeoman"><br>
+    </p> -->
+    <p>
+    This page shows #nowplaying tweets in {{city_name}} that contain a youtube link. It also allows you to post a #nowplaying tweet with a YouTube link.
+      <!-- With ♥ thanks to the contributions of<acme-malarkey extra-values="['Yeoman', 'Gulp', 'Angular']" /> -->
+    </p>
+    <div layout="column" ng-cloak class="layout layout-sm layout-sm-column">
+      <md-content layout-padding layout="row" layout-sm="column">
+        <md-input-container flex>
+          <label>Video URL:</label>
+          <input ng-model="user.title">
+        </md-input-container>
+        <md-input-container flex>
+          <label>Comment:</label>
+          <input ng-model="user.email" type="email">
+        </md-input-container>
+        <md-input-container flex="20">
+          <md-button class="md-raised animated infinite" ng-class="main.classAnimation" ng-click="main.showToastr()">Tweet to #nowplaying</md-button>
+        </md-input-container>
+      </md-content>
+    </div>
+
+      <!-- <div layout="row">
+        <div flex>
+          <label>Video URL: </label><input type="url"> 
+        </div>
+        <div flex>
+          <label>Comment: </label><input type="text"> 
+        </div>
+        <div flex>
+          <md-button class="md-raised animated infinite" ng-class="main.classAnimation" ng-click="main.showToastr()">Tweet to #nowplaying</md-button>
+        </div>
+      </div> -->
+      <br>
+  </section>
+
+  <div class="techs" layout-align="center">
+    <md-card ng-repeat="awesomeThing in main.awesomeThings | orderBy:'rank'">
+      <div class="thumbnail">
+        <img class="pull-right" ng-src="assets/images/{{ awesomeThing.logo }}" alt="{{ awesomeThing.title }}">
+        <div class="caption">
+          <h3>{{ awesomeThing.title }}</h3>
+          <p>{{ awesomeThing.description }}</p>
+          <p><a ng-href="{{ awesomeThing.url }}">{{ awesomeThing.url }}</a></p>
+        </div>
+      </div>
+    </md-card>
+  </div>
+</md-content>
