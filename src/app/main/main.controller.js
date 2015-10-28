@@ -6,30 +6,18 @@
     .controller('MainController', MainController);
 
   /** @ngInject */
-  function MainController($timeout, $log, toastr, $geolocation, $location) {
+  function MainController($timeout, $log, toastr, cityLocator, $location,$window) {
     var vm = this;
+    vm.start = start;
+    vm.location = null;
 
-    activate();
-
-    function activate() {
-      getLocation();
-    }
-
-    function getLocation() {
-      $log.debug("getLocation");
-      $geolocation.getCurrentPosition({
-          timeout: 60000
-       }).then(function(position) {
-          vm.myPosition = position;
-          // $log.info(position.coords);
-          // $log.info(position.coords.latitude);
-          // $log.info(position.coords.longitude);
-          // TODO: check google API to get city name
-          var p = $location.path( "/sf" );
-          vm.cityName = "sf";
-          $log.info("parent()");
-          $log.info(p);
-       });
+    function start() {
+      cityLocator.getLocation().then(function(location){
+        vm.location = location;
+        $location.path( "/"+$window.encodeURIComponent(location.locationName.toLowerCase()));
+      },function(){
+        $log.error("Error getting location!")
+      });
     }
   }
 })();
