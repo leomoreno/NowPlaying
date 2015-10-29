@@ -1,0 +1,45 @@
+<header>
+    <acme-navbar city-name="main.location.locationName" />
+</header> 
+<md-content>
+  <section layout-align="center center" layout="row">
+      <p flex="60" class="md-body-2">
+      This page shows #nowplaying tweets around you that contain a youtube link. It also allows you to post a #nowplaying tweet with a YouTube link.
+      </p>
+    <br>
+  </section>
+  <section layout-align="center center" layout="row">
+    <md-card flex="70" ng-if="main.locations.local">
+        <share-box local="main.locations.local" lat="main.locations.local.latitude" long="main.locations.local.longitud" />
+    </md-card>
+  </section>
+  <section layout-align="center center" layout="column">
+    <md-button md-no-ink class="md-raised md-primary" ng-click="main.start()" ng-if="!main.locations.local">Get my location</md-button>
+    <md-content layout="row" ng-if="main.locations.local">
+      <small>
+        <md-button md-no-ink class="md-primary" ng-click="main.loadFeed(main.locations.local)">{{main.locations.local.locationName}}</md-button>
+        <md-button md-no-ink class="md-primary" ng-click="main.loadFeed(main.locations.paris)">Paris</md-button>
+        <md-button md-no-ink class="md-primary" ng-click="main.loadFeed(main.locations.sf)">SF</md-button>
+        <md-button md-no-ink class="md-primary" ng-click="main.loadFeed(main.locations.global)">Global</md-button>
+      </small>
+    </md-content>
+  </section>
+</md-content>
+
+<md-content class="md-padding" layout="row" layout-align="center center" ng-if="main.feed" layout-wrap>
+  <div flex="60" layout-align="center" ng-repeat="t in main.feed.statuses | filter:youtube track by $index" class="tweet">
+    <blockquote class="twitter-tweet" layout-align="center" lang="es">
+    <p lang="es">{{t.text}}</p>
+    — {{t.user.name}} ({{t.user.screen_name}})
+    <a href="http://twitter.com/{{t.user.screen_name}}/status/{{t.id_str}}">
+      {{t.created_at}}
+    </a>
+    </blockquote>
+  </div>
+  <md-content ng-if="main.feed && main.feedLength <= 0">
+    No tweets found
+  </md-content>
+</md-content>
+<div layout="row" layout-sm="column" layout-align="space-around" ng-if="!main.feed && main.locations.local">
+  <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+</div>
