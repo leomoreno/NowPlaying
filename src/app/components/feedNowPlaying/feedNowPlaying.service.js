@@ -13,12 +13,14 @@
 
     var service = {
       initialize: initialize,
-      getFeed: getFeed
+      getFeed: getFeed,
+      clearCache: clearCache
     };
     return service;
 
     function initialize() {
       deferred = $q.defer();
+      // clearCache();
       OAuth.initialize(oAuthKey,{cache: true});
       service.authorizationResult = OAuth.create("twitter");
       connect().then(initializeComplete,initializeFailed);
@@ -27,10 +29,13 @@
         deferred.resolve();
       }
       function initializeFailed(error) {
-        $log.error('Error connecting to oAuth.io.'+error);
-        deferred.reject();
+        deferred.reject(error);
       }
-
+      return deferred.promise;
+    }
+    function clearCache() {
+        OAuth.clearCache('twitter');
+        service.authorizationResult = false;
     }
     function connect() {
         var deferred = $q.defer();
@@ -48,7 +53,10 @@
     function getFeed(location,maxId) {
       var deferred = $q.defer();
       var url = '/1.1/search/tweets.json';
-      url += '?q=%23nowPlaying&include_entities=true&geocode='+location.latitude+','+location.longitude+',1mi';
+      if(location && location.latitude && location.longitude){
+        url += '?q=%23nowPlaying+youtube&include_entities=true&result_type=recent&count=15&geocode='+location.latitude+','+location.longitude+',50km';
+      }else
+        url += '?q=%23nowPlaying+youtube&include_entities=true&result_type=recent&count=15';
       if (maxId) {
           url += '&max_id=' + maxId;
       }
